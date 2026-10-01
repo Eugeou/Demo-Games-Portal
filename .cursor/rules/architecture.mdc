@@ -1,0 +1,52 @@
+---
+description: Keep the layered structure of fe-games-portal. Do not invent new top-level folders or put UI in domain/infra.
+alwaysApply: true
+---
+
+# fe-games-portal — required structure
+
+Keep these layers: `domain/`, `infrastructure/`, `routes/`, `locales/`, `shared-components/`.
+Phase 1 screens live only in `src/modules/<name>/`. The router globs `src/modules/*/routes/routes.tsx`.
+
+Comments, identifiers, and commit-facing notes in `src/` must be English. User-facing copy belongs in `locales/` (Vietnamese default is OK). Chat with the human in Vietnamese.
+
+## Ownership
+
+| Layer | Allowed | Forbidden |
+|------|---------|-----------|
+| `infrastructure/` | HTTP, env, logger, layout, providers, tech plugins | Feature UI, feature API calls, game logic |
+| `domain/types` | Plain entities/DTOs (User, Game, Coin, News) | React, axios, hooks |
+| `domain/services/<api>/` | Interface + service + mock + query + mutation | JSX, pages |
+| `domain/context/` | App-wide state (user, wallet) | Direct HTTP fetches |
+| `domain/constants/` | Portal business constants | Shopify/AI leftover |
+| `modules/<name>/` | Pages, module UI, UI hooks, `routes/routes.tsx` | New axios instance, copied `HttpServiceBase` |
+| `shared-components/` | UI used by 2+ modules | Screens, API logic |
+| `routes/` | `route-path.ts` + `Routers.tsx` | Inline page implementations |
+
+## Adding a feature
+
+1. Add the path in `src/routes/route-path.ts`.
+2. New module: `src/modules/<name>/routes/routes.tsx` exports `RouteObject[]`.
+3. New API: copy `domain/services/auth/` (interface, service, mock, query, mutation, `index.ts`).
+4. Pages call `useXxxQueries` / `useXxxMutations`. No `axios` in components.
+5. Import via `@/`. Export name matches the file.
+
+```ts
+// BAD — new layer / HTTP inside a page
+src/pages/Home.tsx
+src/features/game/api.ts
+axios.get("/games")
+
+// GOOD
+src/modules/home/pages/HomePage.tsx
+src/domain/services/games/games.service.ts
+useGamesQueries.list()
+```
+
+## Do not
+
+- Create `src/pages`, `src/features`, `src/views`, `src/screens`, `src/api`.
+- Change the router glob (`import.meta.glob("/src/modules/*/routes/routes.tsx")`).
+- Add Shopify leftovers (`shop_owner`, `primary_domain`, AI credits).
+- Turn `App.tsx` into a Vite demo. Root only renders `AppProvider`.
+- Put the admin site in this repo.

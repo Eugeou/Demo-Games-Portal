@@ -1,0 +1,1 @@
+export const HERO_BANNER_INTERVAL_MS = 5000;

@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+html.light {
+  --ink: 17 19 24;
+  --muted: 90 97 110;
+  --canvas: 244 246 250;
+  --surface: 255 255 255;
+  --lift: 236 239 245;
+  --line: 220 225 234;
+  --brand: 0 149 255;
+  color-scheme: light;
+}
+
+html.dark {
+  --ink: 244 246 250;
+  --muted: 156 163 175;
+  --canvas: 10 10 12;
+  --surface: 20 20 24;
+  --lift: 32 32 38;
+  --line: 48 48 56;
+  --brand: 0 149 255;
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  background: rgb(var(--canvas));
+  color: rgb(var(--ink));
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+button {
+  font: inherit;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.lucky-wheel-frame {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  overflow: visible;
+}
+
+.lucky-wheel-frame > div {
+  width: 300px !important;
+  height: 300px !important;
+  max-width: 300px !important;
+  max-height: 300px !important;
+}
+

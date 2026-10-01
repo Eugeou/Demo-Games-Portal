@@ -1,0 +1,35 @@
+---
+description: Feature-module convention. Applies when editing src/modules.
+globs: src/modules/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Module convention
+
+A module is one screen cluster. Phase 1 names: `home`, `auth`, `catalog`, `play`, `profile`, `news`, `rewards`.
+
+```
+src/modules/<name>/
+  routes/routes.tsx      # required — default export RouteObject[]
+  pages/                 # routed screens
+  components/            # UI used only in this module
+  hooks/                 # UI hooks (not HTTP clients)
+```
+
+```tsx
+// src/modules/play/routes/routes.tsx
+import { routePaths } from "@/routes/route-path";
+import lazyWithPreload from "@/infrastructure/plugins/lazy-preload";
+
+const PlayPage = lazyWithPreload(() => import("../pages/PlayPage"));
+
+export default [
+  { path: routePaths.play, element: <PlayPage /> },
+];
+```
+
+- Keep pages thin: read context and call `useXxxQueries` / `useXxxMutations` from `@/domain/services/...`.
+- Do not add `services/` or `api.ts` inside a module.
+- If a component is reused by another module, move it to `src/shared-components/`.
+- Mobile-first. The play page only embeds the game and shows coin balance. Game rules stay inside the game.
+- Comments in this folder are English. UI strings go through i18n.
